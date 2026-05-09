@@ -1,0 +1,24 @@
+{
+  "name": "calculadora-jenkins",
+  "version": "1.0.0",
+  "description": "Proyecto simple para demostrar un pipeline de integracion continua en Jenkins",
+  "main": "src/calculadora.js",
+  "scripts": {
+  "test": "jest",
+  "lint": "eslint .",
+  "build": "node build.js"
+},
+  "keywords": [
+    "jenkins",
+    "pipeline",
+    "ci",
+    "nodejs"
+  ],
+  "author": "mateo y jonathan",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "jest": "^30.0.0"
+  }
+}
