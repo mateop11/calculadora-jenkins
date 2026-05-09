@@ -16,7 +16,7 @@ pipeline {
         stage('2. Instalar dependencias') {
             steps {
                 echo 'Instalando dependencias del proyecto...'
-                sh 'npm ci'
+                bat 'npm ci'
             }
         }
 
@@ -25,22 +25,22 @@ pipeline {
                 stage('3.1 Linter ESLint') {
                     steps {
                         echo 'Ejecutando revision de estilo con ESLint...'
-                        sh 'npm run lint'
+                        bat 'npm run lint'
                     }
                 }
 
                 stage('3.2 Tests automaticos') {
                     steps {
                         echo 'Ejecutando pruebas automaticas con Jest...'
-                        sh 'npm test'
+                        bat 'npm test'
                     }
                 }
 
                 stage('3.3 Verificar entorno') {
                     steps {
                         echo 'Verificando version de Node y npm...'
-                        sh 'node -v'
-                        sh 'npm -v'
+                        bat 'node -v'
+                        bat 'npm -v'
                     }
                 }
             }
@@ -49,7 +49,7 @@ pipeline {
         stage('4. Build') {
             steps {
                 echo 'Generando build de la aplicacion...'
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
     }
