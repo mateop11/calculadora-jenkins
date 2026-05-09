@@ -1,3 +1,5 @@
+@Library('ci-library') _
+
 pipeline {
     agent any
 
@@ -16,7 +18,7 @@ pipeline {
         stage('2. Instalar dependencias') {
             steps {
                 echo 'Instalando dependencias del proyecto...'
-                bat 'npm ci'
+                npmInstall()
             }
         }
 
@@ -25,14 +27,14 @@ pipeline {
                 stage('3.1 Linter ESLint') {
                     steps {
                         echo 'Ejecutando revision de estilo con ESLint...'
-                        bat 'npm run lint'
+                        npmLint()
                     }
                 }
 
                 stage('3.2 Tests automaticos') {
                     steps {
                         echo 'Ejecutando pruebas automaticas con Jest...'
-                        bat 'npm test'
+                        npmTest()
                     }
                 }
 
@@ -49,7 +51,7 @@ pipeline {
         stage('4. Build') {
             steps {
                 echo 'Generando build de la aplicacion...'
-                bat 'npm run build'
+                npmBuild()
             }
         }
     }
