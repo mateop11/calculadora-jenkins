@@ -1,0 +1,83 @@
+version: 2.1
+
+jobs:
+  install:
+    docker:
+      - image: cimg/node:20.18
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ checksum "package-lock.json" }}
+            - npm-cache-
+      - run:
+          name: Instalar dependencias
+          command: npm ci
+      - save_cache:
+          key: npm-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+
+  lint:
+    docker:
+      - image: cimg/node:20.18
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ checksum "package-lock.json" }}
+            - npm-cache-
+      - run:
+          name: Instalar dependencias
+          command: npm ci
+      - run:
+          name: Ejecutar ESLint
+          command: npm run lint
+
+  test:
+    docker:
+      - image: cimg/node:20.18
+    parallelism: 2
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ checksum "package-lock.json" }}
+            - npm-cache-
+      - run:
+          name: Instalar dependencias
+          command: npm ci
+      - run:
+          name: Ejecutar pruebas en paralelo
+          command: npm test
+
+  build:
+    docker:
+      - image: cimg/node:20.18
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ checksum "package-lock.json" }}
+            - npm-cache-
+      - run:
+          name: Instalar dependencias
+          command: npm ci
+      - run:
+          name: Ejecutar build
+          command: npm run build
+
+workflows:
+  pipeline_calculadora:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - lint
+            - test
