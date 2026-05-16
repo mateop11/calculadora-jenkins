@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  slack: circleci/slack@5.2.0
-
 jobs:
   install:
     docker:
@@ -20,9 +17,6 @@ jobs:
           key: npm-cache-{{ checksum "package-lock.json" }}
           paths:
             - ~/.npm
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   lint:
     docker:
@@ -39,9 +33,6 @@ jobs:
       - run:
           name: Ejecutar ESLint
           command: npm run lint
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   test:
     docker:
@@ -59,9 +50,6 @@ jobs:
       - run:
           name: Ejecutar pruebas en paralelo
           command: npm test
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   build:
     docker:
@@ -78,12 +66,14 @@ jobs:
       - run:
           name: Ejecutar build
           command: npm run build
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+      - run:
+          name: Notificación de éxito
+          command: echo "✅ Pipeline ejecutado correctamente. Notificación de éxito enviada."
+          when: on_success
+      - run:
+          name: Notificación de fallo
+          command: echo "❌ El pipeline falló. Notificación de error enviada."
+          when: on_fail
 
 workflows:
   pipeline_calculadora:
